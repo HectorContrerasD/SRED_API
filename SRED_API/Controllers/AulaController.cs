@@ -10,10 +10,10 @@ namespace SRED_API.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
-	public class AulaControllercs : ControllerBase
+	public class AulaController : ControllerBase
 	{
 		private readonly AulaRepository _repository;
-		public AulaControllercs(AulaRepository Repository)
+		public AulaController(AulaRepository Repository)
 		{
 			_repository = Repository;
 		}
