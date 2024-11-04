@@ -71,5 +71,20 @@ namespace SRED_API.Controllers
 				return BadRequest();
 			}
 		}
+		[HttpDelete]
+		public ActionResult Delete(int id)
+		{
+			var equipo = _repository.Get(id);
+			if (equipo != null)
+			{
+				_repository.Delete(id);
+				return Ok();
+			}
+			else
+			{
+
+				return NotFound();	
+			}
+		}
     }
 }

@@ -13,9 +13,11 @@ namespace SRED_API.Controllers
 	public class AulaController : ControllerBase
 	{
 		private readonly AulaRepository _repository;
-		public AulaController(AulaRepository Repository)
+		private readonly EquipoRepository _equipoRepository;
+		public AulaController(AulaRepository Repository, EquipoRepository equipoRepository)
 		{
 			_repository = Repository;
+			_equipoRepository = equipoRepository;
 		}
 		[HttpPost]
 		public ActionResult<AulaDTO> Agregar(AulaDTO aulaDTO)
@@ -30,7 +32,7 @@ namespace SRED_API.Controllers
 				var aula = new Aula
 				{
 					Nombre = aulaDTO.Nombre,
-					Tipo = aulaDTO.Tipo,
+		
 				};
 				_repository.Insert(aula);
 				return Ok("Aula agregada correctamente");
@@ -71,7 +73,7 @@ namespace SRED_API.Controllers
 						return NotFound("El aula no existe");
 					}
 					aula.Nombre = aulaDTO.Nombre;
-					aula.Tipo = aulaDTO.Tipo;
+			
 					_repository.Update(aula);
 					return Ok("Aula editada correctamente");
                 }
@@ -85,6 +87,25 @@ namespace SRED_API.Controllers
 				return BadRequest();
 			}
 
+		}
+		[HttpDelete]
+		public ActionResult Delete(int id)
+		{
+			var aula = _repository.Get(id);
+			if (aula != null)
+			{
+				var equiposxAula = _equipoRepository.GetAll().Where(x => x.AulaIdAulaNavigation.IdAula == id);
+                foreach (var item in equiposxAula)
+                {
+					_equipoRepository.Delete(item);
+                }
+				_repository.Delete(id);
+				return Ok();
+            }
+			else
+			{
+				return NotFound();
+			}
 		}
 
     }

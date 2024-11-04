@@ -10,7 +10,7 @@ namespace SRED_API.Models.Validators
         {
             var validator = new InlineValidator<AulaDTO>();
             validator.RuleFor(x => x.Nombre).NotEmpty().WithMessage("Necesita agregar un nombre del aula");
-            validator.RuleFor(x => x.Tipo).NotEmpty().WithMessage("Necesita agregar el tipo del aula");
+
 
             
             return validator.Validate(aula);

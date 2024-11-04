@@ -13,9 +13,11 @@ namespace SRED_API.Controllers
 	public class TipoController : ControllerBase
 	{
 		private readonly TipoRepository _repository;
-        public TipoController(TipoRepository Repository)
+		private readonly EquipoRepository _equipoRepository;
+        public TipoController(TipoRepository Repository, EquipoRepository equipoRepository)
         {
 				_repository = Repository;
+			_equipoRepository = equipoRepository;
         }
 		[HttpPost]
 		public ActionResult<TipoDTO> Agregar(TipoDTO tipoDTO)
@@ -80,5 +82,22 @@ namespace SRED_API.Controllers
 				return BadRequest();
 			}
 		}
+		[HttpDelete]
+		public ActionResult Delete(int id)
+		{
+			var tipo = _repository.Get(id);
+			if (tipo == null)
+			{
+				return NotFound();
+
+			}
+			var equiposxTipo = _equipoRepository.GetAll().Where(x => x.TipoEquipoIdTipoEquipo == id);
+            foreach (var item in equiposxTipo)
+            {
+                _equipoRepository.Delete(item);
+            }
+			_repository.Delete(id);
+			return Ok();
+        }
 	}
 }
