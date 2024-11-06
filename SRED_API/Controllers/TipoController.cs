@@ -20,7 +20,7 @@ namespace SRED_API.Controllers
 			_equipoRepository = equipoRepository;
         }
 		[HttpPost]
-		public ActionResult<TipoDTO> Agregar(TipoDTO tipoDTO)
+		public async Task<IActionResult> Agregar(TipoDTO tipoDTO)
 		{
 			if (tipoDTO == null) { return BadRequest("No estas enviando un dto"); }
 			var results = TipoValidator.Validate(tipoDTO);
@@ -31,7 +31,7 @@ namespace SRED_API.Controllers
 					Nombre = tipoDTO.Nombre,
 					Icono = tipoDTO.Icono
 				};
-				_repository.Insert(tipo);
+				await _repository.Insert(tipo);
 				return Ok("Tipo de equipo agregado correctamente");
 			}else
 			{
@@ -39,19 +39,19 @@ namespace SRED_API.Controllers
 			}
 		}
 		[HttpGet]
-		public ActionResult<TipoDTO> GetAll()
+		public async Task<IActionResult> GetAll()
 		{
-			var tipos = _repository.GetTipos();
+			var tipos = await _repository.GetTipos();
 			return tipos != null ? Ok(tipos) : NotFound("No se encontraron tipos");
 		}
 		[HttpGet("id")]
-		public ActionResult<TipoDTO> Get(int id)
+		public async Task<IActionResult> Get(int id)
 		{
-			var tipo = _repository.GetTipo(id);
+			var tipo = await _repository.GetTipo(id);
 			return tipo != null ? Ok(tipo) : NotFound("No se encontró el tipo");
 		}
 		[HttpPut]
-		public ActionResult<TipoDTO> Editar(TipoDTO tipoDTO)
+		public async Task<IActionResult> Editar(TipoDTO tipoDTO)
 		{
 			if (tipoDTO == null)
 			{
@@ -62,14 +62,14 @@ namespace SRED_API.Controllers
 				var result = TipoValidator.Validate(tipoDTO);
 				if (result.IsValid)
 				{
-					var tipo = _repository.Get(tipoDTO.Id);
+					var tipo = await _repository.Get(tipoDTO.Id);
 					if (tipo == null)
 					{
 						return NotFound("No se encontró al tipo de equipo");
 					}
 					tipo.Nombre = tipoDTO.Nombre;
 					tipo.Icono = tipoDTO.Icono;
-					_repository.Update(tipo);
+					await _repository.Update(tipo);
 					return Ok("Tipo de equipo editado correctamente");
 				}
 				else
@@ -83,20 +83,20 @@ namespace SRED_API.Controllers
 			}
 		}
 		[HttpDelete]
-		public ActionResult Delete(int id)
+		public async Task<IActionResult> Delete(int id)
 		{
-			var tipo = _repository.Get(id);
+			var tipo = await _repository.Get(id);
 			if (tipo == null)
 			{
 				return NotFound();
 
 			}
-			var equiposxTipo = _equipoRepository.GetAll().Where(x => x.TipoEquipoIdTipoEquipo == id);
+			var equiposxTipo =  _equipoRepository.GetAll().Where(x => x.TipoEquipoIdTipoEquipo == id);
             foreach (var item in equiposxTipo)
             {
-                _equipoRepository.Delete(item);
+                await _equipoRepository.Delete(item);
             }
-			_repository.Delete(id);
+			await _repository.Delete(tipo);
 			return Ok();
         }
 	}

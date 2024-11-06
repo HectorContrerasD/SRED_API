@@ -7,13 +7,13 @@ namespace SRED_API.Repositories
 	public class AulaRepository(WebsitosSredContext context): Repository<Aula>(context)
 	{
 		private readonly WebsitosSredContext Context = context;
-		public List<Aula> GetAulas()
+		public async Task<List<Aula>> GetAulas()
 		{
-			return Context.Aula.ToList();
+			return await Context.Aula.ToListAsync();
 		}
-		public Aula? GetAula(int id)
+		public async Task<Aula?> GetAula(int id)
 		{
-			return Context.Aula.Include(x=>x.Equipo).FirstOrDefault(x=>x.IdAula == id);
+			return await Context.Aula.Include(x=>x.Equipo).FirstOrDefaultAsync(x=>x.IdAula == id);
 		}
 	}
 }

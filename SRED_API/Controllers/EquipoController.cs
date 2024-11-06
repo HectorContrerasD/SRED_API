@@ -17,11 +17,11 @@ namespace SRED_API.Controllers
             _repository = Repository;
         }
 		[HttpPost]
-		public ActionResult<EquipoDTO> Agregar(EquipoDTO equipoDTO)
+		public async Task<IActionResult> Agregar(EquipoDTO equipoDTO)
 		{
 			if (equipoDTO == null) { return BadRequest("No estas mandando un dto"); }
 			var results = EquipoValidator.Validate(equipoDTO);
-			if (results.IsValid) 
+			if (results.IsValid)
 			{
 				var equipo = new Equipo
 				{
@@ -29,17 +29,16 @@ namespace SRED_API.Controllers
 					TipoEquipoIdTipoEquipo = equipoDTO.TipoId,
 					AulaIdAula = equipoDTO.AulaId
 				};
-				_repository.Insert(equipo);
+				await _repository.Insert(equipo);
 				return Ok("Equipo agregado correctamente");
 			}
 			else
 			{
 				return BadRequest(results.Errors.Select(x => x.ErrorMessage));
 			}
-			
 		}
 		[HttpPut]
-		public ActionResult<EquipoDTO> Editar(EquipoDTO equipoDTO)
+		public async Task<IActionResult> Editar(EquipoDTO equipoDTO)
 		{
 			if (equipoDTO == null) { return BadRequest("No estas mandando un dto"); }
 			if (equipoDTO.Id !=0)
@@ -47,13 +46,13 @@ namespace SRED_API.Controllers
 				var results = EquipoValidator.Validate(equipoDTO);
 				if (results.IsValid)
 				{
-					var equipo = _repository.Get(equipoDTO.Id);
+					var equipo = await _repository.Get(equipoDTO.Id);
 					if (equipo != null)
 					{
 						equipo.NumeroIdentificacion = equipoDTO.Numero;
 						equipo.AulaIdAula = equipoDTO.AulaId;
 						equipo.TipoEquipoIdTipoEquipo= equipoDTO.TipoId;
-						_repository.Update(equipo);
+						await _repository.Update(equipo);
 						return Ok("Equipo editado correctamente");
 					}
 					else
@@ -72,12 +71,12 @@ namespace SRED_API.Controllers
 			}
 		}
 		[HttpDelete]
-		public ActionResult Delete(int id)
+		public async Task<IActionResult> Delete(int id)
 		{
-			var equipo = _repository.Get(id);
+			var equipo = await _repository.Get(id);
 			if (equipo != null)
 			{
-				_repository.Delete(id);
+				await _repository.Delete(equipo);
 				return Ok();
 			}
 			else

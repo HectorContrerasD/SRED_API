@@ -6,13 +6,13 @@ namespace SRED_API.Repositories
 	public class TipoRepository(WebsitosSredContext context): Repository<Tipoequipo>(context)
 	{
 		private readonly WebsitosSredContext Context = context;
-		public List<Tipoequipo> GetTipos()
+		public async Task<List<Tipoequipo>> GetTipos()
 		{
-			return Context.Tipoequipo.ToList();
+			return await Context.Tipoequipo.ToListAsync();
 		}
-		public Tipoequipo? GetTipo(int id)
+		public async Task< Tipoequipo?> GetTipo(int id)
 		{
-			return Context.Tipoequipo.Include(x => x.Equipo).FirstOrDefault(x => x.IdTipoEquipo == id);
+			return  await Context.Tipoequipo.Include(x => x.Equipo).FirstOrDefaultAsync(x => x.IdTipoEquipo == id);
 		}
 	}
 }

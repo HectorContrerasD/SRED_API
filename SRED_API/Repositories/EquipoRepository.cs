@@ -6,13 +6,13 @@ namespace SRED_API.Repositories
 	public class EquipoRepository(WebsitosSredContext context): Repository<Equipo>(context)
 	{
 		private readonly WebsitosSredContext Context = context;
-		public List<Equipo> GetEquipos()
+		public async Task< List<Equipo> >GetEquipos()
 		{
-			return Context.Equipo.ToList();
+			return await Context.Equipo.ToListAsync();
 		}
-		public Equipo? GetEquipo(int id)
+		public async Task< Equipo?> GetEquipo(int id)
 		{
-			return Context.Equipo.Include(x => x.TipoEquipoIdTipoEquipo).Include(x=>x.AulaIdAula).FirstOrDefault(x => x.IdEquipo == id);
+			return await Context.Equipo.Include(x => x.TipoEquipoIdTipoEquipo).Include(x=>x.AulaIdAula).FirstOrDefaultAsync(x => x.IdEquipo == id);
 		}
 	}
 }
