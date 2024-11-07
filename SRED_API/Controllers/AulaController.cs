@@ -96,10 +96,13 @@ namespace SRED_API.Controllers
 			if (aula != null)
 			{
 				var equiposxAula =  _equipoRepository.GetAll().Where(x => x.AulaIdAulaNavigation.IdAula == id);
-                foreach (var item in equiposxAula)
-                {
-					await _equipoRepository.Delete(item);
-                }
+				if (equiposxAula != null)
+				{
+					foreach (var item in equiposxAula)
+					{
+						await _equipoRepository.Delete(item);
+					}
+				}
 				await _repository.Delete(aula);
 				return Ok();
             }

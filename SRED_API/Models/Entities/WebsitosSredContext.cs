@@ -26,7 +26,6 @@ public partial class WebsitosSredContext : DbContext
 
     public virtual DbSet<Usuario> Usuario { get; set; }
 
-   
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder
@@ -111,7 +110,6 @@ public partial class WebsitosSredContext : DbContext
             entity.Property(e => e.IdTipoEquipo)
                 .HasColumnType("int(11)")
                 .HasColumnName("idTipoEquipo");
-            entity.Property(e => e.Icono).HasMaxLength(200);
             entity.Property(e => e.Nombre).HasMaxLength(45);
         });
 

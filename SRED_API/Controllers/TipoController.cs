@@ -1,6 +1,7 @@
 ﻿using FluentValidation.Results;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using SRED_API.Models.DTOs;
 using SRED_API.Models.Entities;
 using SRED_API.Models.Validators;
@@ -29,10 +30,21 @@ namespace SRED_API.Controllers
 				var tipo = new Tipoequipo
 				{
 					Nombre = tipoDTO.Nombre,
-					Icono = tipoDTO.Icono
+					//Icono = tipoDTO.Icono
 				};
 				await _repository.Insert(tipo);
-				return Ok("Tipo de equipo agregado correctamente");
+				if (string.IsNullOrEmpty(tipoDTO.Icono))
+				{
+					System.IO.File.Copy("wwwroot/images/Default.jpg", $"wwwroot/images/{tipo.IdTipoEquipo}.jpg");
+				}
+				else
+				{
+                    var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", $"{tipo.IdTipoEquipo}.jpg");
+					var bytes = Convert.FromBase64String(tipoDTO.Icono);
+					System.IO.File.WriteAllBytes(path, bytes);
+				}
+              
+                return Ok("Tipo de equipo agregado correctamente");
 			}else
 			{
 				return BadRequest(results.Errors.Select(x => x.ErrorMessage));
@@ -41,14 +53,30 @@ namespace SRED_API.Controllers
 		[HttpGet]
 		public async Task<IActionResult> GetAll()
 		{
-			var tipos = await _repository.GetTipos();
-			return tipos != null ? Ok(tipos) : NotFound("No se encontraron tipos");
+			var tipos = await  _repository.GetAll().Select(x=> new TipoDTO
+			{
+				Id = x.IdTipoEquipo,
+				Nombre = x.Nombre,
+				Icono = ConvertBase64($"wwwroot/images/{x.IdTipoEquipo}.jpg")
+			}).ToListAsync();
+			return Ok(tipos);
+		
 		}
 		[HttpGet("id")]
 		public async Task<IActionResult> Get(int id)
 		{
 			var tipo = await _repository.GetTipo(id);
-			return tipo != null ? Ok(tipo) : NotFound("No se encontró el tipo");
+			if (tipo == null)
+			{
+				return NotFound();
+			}
+			var tipoDTO = new TipoDTO
+			{
+				Icono = ConvertBase64($"wwwroot/images/{tipo.IdTipoEquipo}.jpg"),
+				Id = tipo.IdTipoEquipo,
+				Nombre = tipo.Nombre
+			};
+			return Ok(tipoDTO);
 		}
 		[HttpPut]
 		public async Task<IActionResult> Editar(TipoDTO tipoDTO)
@@ -68,7 +96,7 @@ namespace SRED_API.Controllers
 						return NotFound("No se encontró al tipo de equipo");
 					}
 					tipo.Nombre = tipoDTO.Nombre;
-					tipo.Icono = tipoDTO.Icono;
+					//tipo.Icono = tipoDTO.Icono;
 					await _repository.Update(tipo);
 					return Ok("Tipo de equipo editado correctamente");
 				}
@@ -92,12 +120,25 @@ namespace SRED_API.Controllers
 
 			}
 			var equiposxTipo =  _equipoRepository.GetAll().Where(x => x.TipoEquipoIdTipoEquipo == id);
-            foreach (var item in equiposxTipo)
-            {
-                await _equipoRepository.Delete(item);
-            }
+			if (equiposxTipo!=null)
+			{
+				foreach (var item in equiposxTipo)
+				{
+					await _equipoRepository.Delete(item);
+				}
+			}
 			await _repository.Delete(tipo);
 			return Ok();
         }
-	}
+        public string ConvertBase64(string imagePath)
+        {
+            if (System.IO.File.Exists(imagePath))
+            {
+                byte[] imageArray = System.IO.File.ReadAllBytes(imagePath);
+                string base64ImageRepresentation = Convert.ToBase64String(imageArray);
+                return base64ImageRepresentation;
+            }
+            return "";
+        }
+    }
 }

@@ -37,7 +37,19 @@ namespace SRED_API.Controllers
 				return BadRequest(results.Errors.Select(x => x.ErrorMessage));
 			}
 		}
-		[HttpPut]
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
+        {
+            var aulas = await _repository.GetEquipos();
+            return aulas != null ? Ok(aulas) : NotFound("No se encontraron equipos");
+        }
+        [HttpGet("id")]
+        public async Task<IActionResult> Get(int id)
+        {
+            var aula = await _repository.GetEquipo(id);
+            return aula != null ? Ok(aula) : NotFound("No se encontró el equipo");
+        }
+        [HttpPut]
 		public async Task<IActionResult> Editar(EquipoDTO equipoDTO)
 		{
 			if (equipoDTO == null) { return BadRequest("No estas mandando un dto"); }
@@ -81,7 +93,6 @@ namespace SRED_API.Controllers
 			}
 			else
 			{
-
 				return NotFound();	
 			}
 		}
