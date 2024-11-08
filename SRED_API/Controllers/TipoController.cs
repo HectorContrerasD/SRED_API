@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SRED_API.Helpers;
 using SRED_API.Models.DTOs;
 using SRED_API.Models.Entities;
 using SRED_API.Models.Validators;
@@ -57,7 +58,7 @@ namespace SRED_API.Controllers
 			{
 				Id = x.IdTipoEquipo,
 				Nombre = x.Nombre,
-				Icono = ConvertBase64($"wwwroot/images/{x.IdTipoEquipo}.jpg")
+				Icono = ImageToBase64Helper.ConvertBase64($"wwwroot/images/{x.IdTipoEquipo}.jpg")
 			}).ToListAsync();
 			return Ok(tipos);
 		
@@ -72,7 +73,7 @@ namespace SRED_API.Controllers
 			}
 			var tipoDTO = new TipoDTO
 			{
-				Icono = ConvertBase64($"wwwroot/images/{tipo.IdTipoEquipo}.jpg"),
+				Icono = ImageToBase64Helper.ConvertBase64($"wwwroot/images/{tipo.IdTipoEquipo}.jpg"),
 				Id = tipo.IdTipoEquipo,
 				Nombre = tipo.Nombre
 			};
@@ -130,15 +131,7 @@ namespace SRED_API.Controllers
 			await _repository.Delete(tipo);
 			return Ok();
         }
-        public string ConvertBase64(string imagePath)
-        {
-            if (System.IO.File.Exists(imagePath))
-            {
-                byte[] imageArray = System.IO.File.ReadAllBytes(imagePath);
-                string base64ImageRepresentation = Convert.ToBase64String(imageArray);
-                return base64ImageRepresentation;
-            }
-            return "";
-        }
+		
+       
     }
 }
