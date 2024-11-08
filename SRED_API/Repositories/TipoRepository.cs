@@ -8,7 +8,7 @@ namespace SRED_API.Repositories
 		private readonly WebsitosSredContext Context = context;
 		public async Task<List<Tipoequipo>> GetTipos()
 		{
-			return await Context.Tipoequipo.ToListAsync();
+			return await Context.Tipoequipo.Include(x=>x.Equipo).ToListAsync();
 		}
 		public async Task< Tipoequipo?> GetTipo(int id)
 		{

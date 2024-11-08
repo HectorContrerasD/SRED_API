@@ -9,7 +9,7 @@ namespace SRED_API.Repositories
 		private readonly WebsitosSredContext Context = context;
 		public async Task<List<Aula>> GetAulas()
 		{
-			return await Context.Aula.ToListAsync();
+			return await Context.Aula.Include(x=>x.Equipo).ToListAsync();
 		}
 		public async Task<Aula?> GetAula(int id)
 		{
