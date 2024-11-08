@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using SRED_API.Models.Entities;
 using SRED_API.Repositories;
 
@@ -19,16 +20,24 @@ builder.Services.AddDbContext<WebsitosSredContext>
 builder.Services.AddTransient<AulaRepository>();
 builder.Services.AddTransient<EquipoRepository>();
 builder.Services.AddTransient<TipoRepository>();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("PermitirTodos", policy =>
+    {
+        policy.AllowAnyOrigin() // Cambia esto al origen que necesites permitir
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
 	app.UseSwagger();
-	app.UseSwaggerUI();
+    app.UseSwaggerUI();
 }
-
-
+app.UseCors("PermitirTodos");
 app.MapControllers();	
 
 app.UseHttpsRedirection();
