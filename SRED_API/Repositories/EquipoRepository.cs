@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SRED_API.Models.DTOs;
 using SRED_API.Models.Entities;
 
 namespace SRED_API.Repositories
@@ -6,9 +7,15 @@ namespace SRED_API.Repositories
 	public class EquipoRepository(WebsitosSredContext context): Repository<Equipo>(context)
 	{
 		private readonly WebsitosSredContext Context = context;
-		public async Task< List<Equipo> >GetEquipos()
+		public async Task< List<EquipoDatosDto> >GetEquipos()
 		{
-			return await Context.Equipo.ToListAsync();
+			var equipo= await Context.Equipo.Include(x=>x.AulaIdAulaNavigation).Select(x=>new EquipoDatosDto()
+			{
+				Aula=x.AulaIdAulaNavigation.Nombre,
+				Nombre=x.NumeroIdentificacion,
+				Id=x.IdEquipo
+			}).ToListAsync();
+			return equipo;
 		}
 		public async Task< Equipo?> GetEquipo(int id)
 		{

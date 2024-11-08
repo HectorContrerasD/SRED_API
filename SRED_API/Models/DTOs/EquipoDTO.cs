@@ -8,4 +8,9 @@
         public int AulaId { get; set; }
 
     }
+    public class EquipoDatosDto : EquipoDTO
+    {
+        public string Nombre { get; set; }
+        public string Aula { get; set; }
+    }
 }
