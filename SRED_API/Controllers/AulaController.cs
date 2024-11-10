@@ -55,10 +55,11 @@ namespace SRED_API.Controllers
 			}).ToListAsync();
 			return aulas != null ? Ok(aulas) : NotFound("No se encontraron aulas");
 		}
-		[HttpGet("id")]
+		[HttpGet("{id}")]
 		public async Task<IActionResult> Get(int id)
 		{
 			var aula = await _repository.GetAula(id);
+			
 			return aula != null ? Ok(aula) : NotFound("No se encontró el aula");
 		}
 		[HttpPut]

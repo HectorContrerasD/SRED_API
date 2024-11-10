@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SRED_API.Models.DTOs;
 using SRED_API.Models.Entities;
 
 namespace SRED_API.Repositories
@@ -11,9 +12,13 @@ namespace SRED_API.Repositories
 		{
 			return await Context.Aula.Include(x=>x.Equipo).ToListAsync();
 		}
-		public async Task<Aula?> GetAula(int id)
+		public async Task<AulaDTO?> GetAula(int id)
 		{
-			return await Context.Aula.Include(x=>x.Equipo).FirstOrDefaultAsync(x=>x.IdAula == id);
+			return await Context.Aula.Select(x=> new AulaDTO
+			{
+				Id = id,
+				Nombre = x.Nombre,
+			}).FirstOrDefaultAsync(x=>x.Id == id);
 		}
 	}
 }

@@ -42,14 +42,14 @@ namespace SRED_API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var aulas = await _repository.GetEquipos();
-            return aulas != null ? Ok(aulas) : NotFound("No se encontraron equipos");
+            var equipos = await _repository.GetEquipos();
+            return equipos != null ? Ok(equipos) : NotFound("No se encontraron equipos");
         }
-        [HttpGet("id")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            var aula = await _repository.GetEquipo(id);
-            return aula != null ? Ok(aula) : NotFound("No se encontró el equipo");
+            var equipo = await _repository.GetEquipo(id);
+            return equipo != null ? Ok(equipo) : NotFound("No se encontró el equipo");
         }
 		[HttpGet("/api/equipo/poraula")]
 		public async Task<IActionResult> GetEquiposPorAula(int idaula)
