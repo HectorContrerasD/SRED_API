@@ -12,9 +12,11 @@ namespace SRED_API.Controllers
 	public class EquipoController : ControllerBase
 	{
 		private readonly EquipoRepository _repository;
-        public EquipoController(EquipoRepository Repository)
+		private readonly AulaRepository _aulaRepository;
+        public EquipoController(EquipoRepository Repository, AulaRepository aulaRepository)
         {
             _repository = Repository;
+			_aulaRepository = aulaRepository;
         }
 		[HttpPost]
 		public async Task<IActionResult> Agregar(EquipoDTO equipoDTO)
@@ -49,10 +51,11 @@ namespace SRED_API.Controllers
             var aula = await _repository.GetEquipo(id);
             return aula != null ? Ok(aula) : NotFound("No se encontró el equipo");
         }
-		[HttpGet("/PorAula/{id}")]
+		[HttpGet("/api/equipo/poraula/{id}")]
 		public async Task<IActionResult> GetEquiposPorAula(int idaula)
 		{
-			return null;
+			var aulaConEquipos = await _repository.GetEquiposByAulaId(idaula);
+			return aulaConEquipos != null ? Ok(aulaConEquipos) : NotFound("No se encontraron equipos para el aula");
 		}
         [HttpPut]
 		public async Task<IActionResult> Editar(EquipoDTO equipoDTO)

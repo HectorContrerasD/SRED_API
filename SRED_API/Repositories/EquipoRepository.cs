@@ -21,5 +21,22 @@ namespace SRED_API.Repositories
 		{
 			return await Context.Equipo.Include(x => x.TipoEquipoIdTipoEquipo).Include(x=>x.AulaIdAula).FirstOrDefaultAsync(x => x.IdEquipo == id);
 		}
+		public async Task<AulaConEquiposDTO> GetEquiposByAulaId(int aulaid)
+		{
+			var aula = await Context.Aula.Include(a => a.Equipo).Where(x => x.IdAula == aulaid)
+				.Select(x => new AulaConEquiposDTO
+				{
+					Id = x.IdAula,
+					Nombre = x.Nombre,
+					Equipos = x.Equipo.Select(e=> new EquipoDTO
+					{
+						Id = e.IdEquipo,
+						Numero = e.NumeroIdentificacion,
+						TipoId = e.TipoEquipoIdTipoEquipo,
+						AulaId = e.AulaIdAula
+					}).ToList()
+				}).FirstOrDefaultAsync();
+			return aula;
+		}
 	}
 }
