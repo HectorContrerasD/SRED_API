@@ -1,6 +1,8 @@
 ﻿using FluentValidation.Results;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using SRED_API.Helpers;
 using SRED_API.Models.DTOs;
 using SRED_API.Models.Entities;
 using SRED_API.Models.Validators;
@@ -31,7 +33,7 @@ namespace SRED_API.Controllers
 			{
 				var aula = new Aula
 				{
-					Nombre = aulaDTO.Nombre,
+					Nombre = aulaDTO.Nombre.ToUpper(),
 		
 				};
                 await _repository.Insert(aula);
@@ -46,7 +48,11 @@ namespace SRED_API.Controllers
 		[HttpGet]
 		public async Task<IActionResult> GetAll()
 		{
-			var aulas = await _repository.GetAulas();
+            var aulas = await _repository.GetAll().Select(x=> new AulaDTO
+			{
+				Id = x.IdAula,
+				Nombre = x.Nombre
+			}).ToListAsync();
 			return aulas != null ? Ok(aulas) : NotFound("No se encontraron aulas");
 		}
 		[HttpGet("id")]
@@ -73,7 +79,7 @@ namespace SRED_API.Controllers
 					{
 						return NotFound("El aula no existe");
 					}
-					aula.Nombre = aulaDTO.Nombre;
+					aula.Nombre = aulaDTO.Nombre.ToUpper();
 
 					await _repository.Update(aula);
 					return Ok("Aula editada correctamente");

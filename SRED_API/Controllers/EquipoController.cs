@@ -49,6 +49,11 @@ namespace SRED_API.Controllers
             var aula = await _repository.GetEquipo(id);
             return aula != null ? Ok(aula) : NotFound("No se encontró el equipo");
         }
+		[HttpGet("/PorAula/{id}")]
+		public async Task<IActionResult> GetEquiposPorAula(int idaula)
+		{
+			return null;
+		}
         [HttpPut]
 		public async Task<IActionResult> Editar(EquipoDTO equipoDTO)
 		{
