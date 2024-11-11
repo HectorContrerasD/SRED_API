@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using SRED_API.Models.DTOs;
 using SRED_API.Models.Entities;
 
@@ -80,6 +81,9 @@ namespace SRED_API.Repositories
             }).ToListAsync();
             return reportes;
         }
-
+        public async Task<int> Count()
+        {
+            return await Context.Reporte.CountAsync();
+        }
     }
 }

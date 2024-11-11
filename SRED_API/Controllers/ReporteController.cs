@@ -4,6 +4,8 @@ using SRED_API.Models.DTOs;
 using SRED_API.Models.Entities;
 using SRED_API.Models.Validators;
 using SRED_API.Repositories;
+using System.Net;
+using System.Net.Mail;
 
 namespace SRED_API.Controllers
 {
@@ -16,6 +18,12 @@ namespace SRED_API.Controllers
         {
             _repository = reporteRepository;
         }
+        [HttpGet]
+        public async Task<IActionResult> GetReportes()
+        {
+            return null;
+        }
+        [HttpPost]
         public async Task<IActionResult> Agregar(ReporteDTO dto)
         {
             if (dto== null) { return BadRequest("No se está recibiendo un dto"); }
@@ -28,13 +36,48 @@ namespace SRED_API.Controllers
                     EquipoIdEquipo = dto.EquipoId,
                     Descripcion = dto.Descripcion
                 };
+                reporte.Estado = 1;
+                reporte.FechaCreacion = DateOnly.FromDateTime(DateTime.Now);
+                int count = await _repository.Count();
                 await _repository.Insert(reporte);
+                reporte.Folio = $"DTICS{(count + 1):D5}";
+                await _repository.Insert(reporte);
+                return Ok("Reporte agregado correctamente");
             }
             else
             {
-
+                return BadRequest(results.Errors.Select(x => x.ErrorMessage));
             }
-            return Ok();
+        }
+        [HttpPut("{id}")]
+        public async Task<IActionResult> ModificarEstado(int id)
+        {
+            var reporte = await _repository.Get(id);
+            if (reporte == null) { return NotFound(); } 
+            reporte.Estado= 1;
+            await _repository.Update(reporte);
+            string emailAdd = $"{reporte.NoControlAl}@rcarbonifera.tecnm.mx";
+            try
+            {
+                var mailMess = new MailMessage();
+                mailMess.From = new MailAddress("201g0239@rcarbonifera.tecnm.mx");
+                mailMess.To.Add(emailAdd);
+                mailMess.Subject = "Reporte atendido";
+                mailMess.Body = $"Estimado usuario, el reporte con el número de folio {reporte.Folio} ha sido atendido, que tenga un buen día";
+                using (var smtpClient = new SmtpClient("", 587))
+                {
+                    smtpClient.Credentials = new NetworkCredential("201G0239@rcarbonifera.tecnm.mx", "Ingreso2020");
+                    smtpClient.EnableSsl = true;
+                    await smtpClient.SendMailAsync(mailMess);
+                }
+            
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500, $"Error al mandar el mensaje: {ex.Message}");
+            }
+            return Ok("Estado Modificado");
         }
     }
 }
