@@ -96,7 +96,7 @@ namespace SRED_API.Controllers
 			}
 
 		}
-		[HttpDelete]
+		[HttpPut("{id}")]
 		public async Task<IActionResult> Delete(int id)
 		{
 			var aula = await _repository.Get(id);
@@ -111,7 +111,7 @@ namespace SRED_API.Controllers
 					}
 				}
 				await _repository.Delete(aula);
-				return Ok();
+				return Ok("Aula eliminada correctamente");
             }
 			else
 			{
