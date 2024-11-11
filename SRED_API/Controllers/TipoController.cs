@@ -63,7 +63,7 @@ namespace SRED_API.Controllers
 			return Ok(tipos);
 		
 		}
-		[HttpGet("id")]
+		[HttpGet("{id}")]
 		public async Task<IActionResult> Get(int id)
 		{
 			var tipo = await _repository.GetTipo(id);
