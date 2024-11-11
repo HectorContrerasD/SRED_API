@@ -130,7 +130,7 @@ namespace SRED_API.Controllers
 				return NotFound();
 
 			}
-			var equiposxTipo =  _equipoRepository.GetAll().Where(x => x.TipoEquipoIdTipoEquipo == id);
+			var equiposxTipo =  _equipoRepository.GetAll().Where(x => x.TipoEquipoIdTipoEquipo == id).ToList();
 			if (equiposxTipo!=null)
 			{
 				foreach (var item in equiposxTipo)

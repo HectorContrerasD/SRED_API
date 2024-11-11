@@ -102,7 +102,7 @@ namespace SRED_API.Controllers
 			var aula = await _repository.Get(id);
 			if (aula != null)
 			{
-				var equiposxAula =  _equipoRepository.GetAll().Where(x => x.AulaIdAulaNavigation.IdAula == id);
+				var equiposxAula =  _equipoRepository.GetAll().Where(x => x.AulaIdAulaNavigation.IdAula == id).ToList();
 				if (equiposxAula != null)
 				{
 					foreach (var item in equiposxAula)
