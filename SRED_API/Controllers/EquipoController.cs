@@ -90,7 +90,7 @@ namespace SRED_API.Controllers
 				return BadRequest();
 			}
 		}
-		[HttpDelete]
+		[HttpPut("{id}")]
 		public async Task<IActionResult> Delete(int id)
 		{
 			var equipo = await _repository.Get(id);
