@@ -99,7 +99,17 @@ namespace SRED_API.Controllers
 					tipo.Nombre = tipoDTO.Nombre;
 					//tipo.Icono = tipoDTO.Icono;
 					await _repository.Update(tipo);
-					return Ok("Tipo de equipo editado correctamente");
+					if (string.IsNullOrEmpty(tipoDTO.Icono))
+					{
+						System.IO.File.Copy("wwwroot/images/Default.jpg", $"wwwroot/images/{tipoDTO.Id}.jpg");
+					}
+					else
+					{
+						var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", $"{tipoDTO.Id}.jpg");
+						var bytes = Convert.FromBase64String( tipoDTO.Icono );
+						System.IO.File.WriteAllBytes(path, bytes );
+					}
+                    return Ok("Tipo de equipo editado correctamente");
 				}
 				else
 				{
