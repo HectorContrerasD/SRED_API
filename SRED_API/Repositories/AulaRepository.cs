@@ -14,11 +14,12 @@ namespace SRED_API.Repositories
 		}
 		public async Task<AulaDTO?> GetAula(int id)
 		{
-			return await Context.Aula.Select(x=> new AulaDTO
-			{
-				Id = id,
-				Nombre = x.Nombre,
-			}).FirstOrDefaultAsync(x=>x.Id == id);
-		}
+			
+			return await Context.Aula.Select(x => new AulaDTO
+            {
+                Id = x.IdAula,
+                Nombre = x.Nombre,
+            }).FirstOrDefaultAsync(x => x.Id == id);
+        }
 	}
 }
