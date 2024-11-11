@@ -32,9 +32,9 @@ namespace SRED_API.Repositories
             }).ToListAsync();
             return reportes;
         }
-        public async Task<List<ReporteDatosDTO>> GetReportesXAtender(DateOnly fecha)
+        public async Task<List<ReporteDatosDTO>> GetReportesXAtender()
         {
-            var reportes = await Context.Reporte.Include(x => x.EquipoIdEquipoNavigation).Where(x => x.FechaCreacion == fecha).Select(x => new ReporteDatosDTO
+            var reportes = await Context.Reporte.Include(x => x.EquipoIdEquipoNavigation).Where(x=>x.Estado == 1).Select(x => new ReporteDatosDTO
             {
                 Id = x.IdReporte,
                 Aula = x.EquipoIdEquipoNavigation.AulaIdAulaNavigation.Nombre,
@@ -44,5 +44,42 @@ namespace SRED_API.Repositories
             }).ToListAsync();
             return reportes;
         }
+        public async Task<List<ReporteDatosDTO>> GetReportesAtendidos()
+        {
+            var reportes = await Context.Reporte.Include(x => x.EquipoIdEquipoNavigation).Where(x => x.Estado == 0).Select(x => new ReporteDatosDTO
+            {
+                Id = x.IdReporte,
+                Aula = x.EquipoIdEquipoNavigation.AulaIdAulaNavigation.Nombre,
+                Descripcion = x.Descripcion,
+                Equipo = $"{x.EquipoIdEquipoNavigation.TipoEquipoIdTipoEquipoNavigation.Nombre} {x.EquipoIdEquipoNavigation.NumeroIdentificacion}",
+                Folio = x.Folio
+            }).ToListAsync();
+            return reportes;
+        }
+        public async Task<List<ReporteDatosDTO>> GetReportesRecientes()
+        {
+            var reportes = await Context.Reporte.Include(x => x.EquipoIdEquipoNavigation).OrderBy(x=>x.FechaCreacion).Select(x => new ReporteDatosDTO
+            {
+                Id = x.IdReporte,
+                Aula = x.EquipoIdEquipoNavigation.AulaIdAulaNavigation.Nombre,
+                Descripcion = x.Descripcion,
+                Equipo = $"{x.EquipoIdEquipoNavigation.TipoEquipoIdTipoEquipoNavigation.Nombre} {x.EquipoIdEquipoNavigation.NumeroIdentificacion}",
+                Folio = x.Folio
+            }).ToListAsync();
+            return reportes;
+        }
+        public async Task<List<ReporteDatosDTO>> GetReportesAntiguos()
+        {
+            var reportes = await Context.Reporte.Include(x => x.EquipoIdEquipoNavigation).OrderByDescending(x => x.FechaCreacion).Select(x => new ReporteDatosDTO
+            {
+                Id = x.IdReporte,
+                Aula = x.EquipoIdEquipoNavigation.AulaIdAulaNavigation.Nombre,
+                Descripcion = x.Descripcion,
+                Equipo = $"{x.EquipoIdEquipoNavigation.TipoEquipoIdTipoEquipoNavigation.Nombre} {x.EquipoIdEquipoNavigation.NumeroIdentificacion}",
+                Folio = x.Folio
+            }).ToListAsync();
+            return reportes;
+        }
+
     }
 }

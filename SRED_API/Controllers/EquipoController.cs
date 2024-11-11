@@ -12,11 +12,11 @@ namespace SRED_API.Controllers
 	public class EquipoController : ControllerBase
 	{
 		private readonly EquipoRepository _repository;
-		private readonly AulaRepository _aulaRepository;
-        public EquipoController(EquipoRepository Repository, AulaRepository aulaRepository)
+		
+        public EquipoController(EquipoRepository Repository)
         {
             _repository = Repository;
-			_aulaRepository = aulaRepository;
+		
         }
 		[HttpPost]
 		public async Task<IActionResult> Agregar(EquipoDTO equipoDTO)

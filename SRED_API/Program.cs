@@ -20,6 +20,7 @@ builder.Services.AddDbContext<WebsitosSredContext>
 builder.Services.AddTransient<AulaRepository>();
 builder.Services.AddTransient<EquipoRepository>();
 builder.Services.AddTransient<TipoRepository>();
+builder.Services.AddTransient<ReporteRepository>();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("PermitirTodos", policy =>
