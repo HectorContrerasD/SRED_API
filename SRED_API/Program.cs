@@ -12,15 +12,6 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<WebsitosSredContext>
-	(
-		x => x.UseMySql("database=websitos_SRED;user=websitos_sred;password=56kXu91^j;server=65.181.111.21",
-		Microsoft.EntityFrameworkCore.ServerVersion.Parse("10.11.8-mariadb"))
-	);
-builder.Services.AddTransient<AulaRepository>();
-builder.Services.AddTransient<EquipoRepository>();
-builder.Services.AddTransient<TipoRepository>();
-builder.Services.AddTransient<ReporteRepository>();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("PermitirTodos", policy =>
@@ -30,6 +21,15 @@ builder.Services.AddCors(options =>
               .AllowAnyMethod();
     });
 });
+builder.Services.AddDbContext<WebsitosSredContext>
+	(
+		x => x.UseMySql("database=websitos_SRED;user=websitos_sred;password=56kXu91^j;server=65.181.111.21",
+		Microsoft.EntityFrameworkCore.ServerVersion.Parse("10.11.8-mariadb"))
+	);
+builder.Services.AddTransient<AulaRepository>();
+builder.Services.AddTransient<EquipoRepository>();
+builder.Services.AddTransient<TipoRepository>();
+builder.Services.AddTransient<ReporteRepository>();
 var app = builder.Build();
 
 app.UseCors("PermitirTodos");
