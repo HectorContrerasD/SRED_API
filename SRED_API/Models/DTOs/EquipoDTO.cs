@@ -12,5 +12,6 @@
     {
         public string Nombre { get; set; }
         public string Aula { get; set; }
+        public string Tipo { get; set; }
     }
 }
