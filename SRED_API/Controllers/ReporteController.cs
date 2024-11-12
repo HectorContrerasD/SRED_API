@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SRED_API.Models.DTOs;
 using SRED_API.Models.Entities;
@@ -18,10 +19,47 @@ namespace SRED_API.Controllers
         {
             _repository = reporteRepository;
         }
-        [HttpGet]
-        public async Task<IActionResult> GetReportes()
+        [HttpGet("reportes")] //fromquery = /reportes?fecha=2024-11-10
+        public async Task<IActionResult> GetReportes([FromQuery] DateOnly? fecha = null)
         {
-            return null;
+            var reportes = await _repository.GetReportes();
+            if (fecha.HasValue)
+            {
+                reportes = reportes.Where(x => x.FechaCreacion == fecha).ToList();
+            }
+            return reportes.Any() ? Ok(reportes) : NotFound();
+        }
+        [HttpGet("reportesxatender")]
+        public async Task<IActionResult> GetReportesXAtender([FromQuery] DateOnly? fecha = null)
+        {
+            var reportes = await _repository.GetReportesXAtender();
+            if (fecha.HasValue)
+            {
+                reportes = reportes.Where(x => x.FechaCreacion == fecha).ToList();
+            }
+            return reportes.Any() ? Ok(reportes) : NotFound();
+        }
+        [HttpGet("reportesatendidos")]
+        public async Task<IActionResult> GetReportesAtendidos(DateOnly? fecha = null)
+        {
+            var reportes = await _repository.GetReportesAtendidos();
+            if (fecha.HasValue)
+            {
+                reportes = reportes.Where(x => x.FechaCreacion == fecha).ToList();
+            }
+            return reportes.Any() ? Ok(reportes) : NotFound();
+        }
+        [HttpGet("reportesxmasantiguos")]
+        public async Task<IActionResult> GetReportesXAntiguedad()
+        {
+            var reportes = await _repository.GetReportesAntiguos();
+            return reportes.Any() ? Ok(reportes) : NotFound();
+        }
+        [HttpGet("reportesxmasrecientes")]
+        public async Task<IActionResult> GetReportesxMasRecientes1()
+        {
+            var reportes = await _repository.GetReportesRecientes();
+            return reportes.Any() ? Ok(reportes) : NotFound();
         }
         [HttpPost]
         public async Task<IActionResult> Agregar(ReporteDTO dto)
@@ -36,7 +74,7 @@ namespace SRED_API.Controllers
                     EquipoIdEquipo = dto.EquipoId,
                     Descripcion = dto.Descripcion
                 };
-                reporte.Estado = 1;
+                reporte.Estado = 0;
                 reporte.FechaCreacion = DateOnly.FromDateTime(DateTime.Now);
                 int count = await _repository.Count();
                 await _repository.Insert(reporte);

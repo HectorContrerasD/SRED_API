@@ -1,4 +1,5 @@
-﻿using SRED_API.Models.Entities;
+﻿using Microsoft.EntityFrameworkCore.Storage;
+using SRED_API.Models.Entities;
 
 namespace SRED_API.Models.DTOs
 {
@@ -16,5 +17,7 @@ namespace SRED_API.Models.DTOs
         public string Folio { get; set; } = null!;
         public string Equipo { get; set; } = null!;
         public string Aula { get; set; } = null!;
+        public DateOnly FechaCreacion { get; set; }
+        
     }
 }

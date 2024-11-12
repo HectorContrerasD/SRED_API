@@ -15,7 +15,7 @@ namespace SRED_API.Repositories
                 Id = x.IdReporte,
                 Aula =x.EquipoIdEquipoNavigation.AulaIdAulaNavigation.Nombre,
                 Descripcion =x.Descripcion,
-                
+                FechaCreacion = x.FechaCreacion,
                 Equipo = $"{x.EquipoIdEquipoNavigation.TipoEquipoIdTipoEquipoNavigation.Nombre} {x.EquipoIdEquipoNavigation.NumeroIdentificacion}",
                 Folio = x.Folio
             }).ToListAsync();
@@ -29,31 +29,34 @@ namespace SRED_API.Repositories
                 Aula = x.EquipoIdEquipoNavigation.AulaIdAulaNavigation.Nombre,
                 Descripcion = x.Descripcion,
                 Equipo = $"{x.EquipoIdEquipoNavigation.TipoEquipoIdTipoEquipoNavigation.Nombre} {x.EquipoIdEquipoNavigation.NumeroIdentificacion}",
-                Folio = x.Folio
+                Folio = x.Folio,
+                FechaCreacion = x.FechaCreacion
             }).ToListAsync();
             return reportes;
         }
         public async Task<List<ReporteDatosDTO>> GetReportesXAtender()
         {
-            var reportes = await Context.Reporte.Include(x => x.EquipoIdEquipoNavigation).Where(x=>x.Estado == 1).Select(x => new ReporteDatosDTO
+            var reportes = await Context.Reporte.Include(x => x.EquipoIdEquipoNavigation).Where(x=>x.Estado == 0).Select(x => new ReporteDatosDTO
             {
                 Id = x.IdReporte,
                 Aula = x.EquipoIdEquipoNavigation.AulaIdAulaNavigation.Nombre,
                 Descripcion = x.Descripcion,
                 Equipo = $"{x.EquipoIdEquipoNavigation.TipoEquipoIdTipoEquipoNavigation.Nombre} {x.EquipoIdEquipoNavigation.NumeroIdentificacion}",
-                Folio = x.Folio
+                Folio = x.Folio,
+                FechaCreacion=x.FechaCreacion
             }).ToListAsync();
             return reportes;
         }
         public async Task<List<ReporteDatosDTO>> GetReportesAtendidos()
         {
-            var reportes = await Context.Reporte.Include(x => x.EquipoIdEquipoNavigation).Where(x => x.Estado == 0).Select(x => new ReporteDatosDTO
+            var reportes = await Context.Reporte.Include(x => x.EquipoIdEquipoNavigation).Where(x => x.Estado == 1).Select(x => new ReporteDatosDTO
             {
                 Id = x.IdReporte,
                 Aula = x.EquipoIdEquipoNavigation.AulaIdAulaNavigation.Nombre,
                 Descripcion = x.Descripcion,
                 Equipo = $"{x.EquipoIdEquipoNavigation.TipoEquipoIdTipoEquipoNavigation.Nombre} {x.EquipoIdEquipoNavigation.NumeroIdentificacion}",
-                Folio = x.Folio
+                Folio = x.Folio,
+                FechaCreacion = x.FechaCreacion
             }).ToListAsync();
             return reportes;
         }
@@ -65,7 +68,8 @@ namespace SRED_API.Repositories
                 Aula = x.EquipoIdEquipoNavigation.AulaIdAulaNavigation.Nombre,
                 Descripcion = x.Descripcion,
                 Equipo = $"{x.EquipoIdEquipoNavigation.TipoEquipoIdTipoEquipoNavigation.Nombre} {x.EquipoIdEquipoNavigation.NumeroIdentificacion}",
-                Folio = x.Folio
+                Folio = x.Folio,
+                FechaCreacion = x.FechaCreacion
             }).ToListAsync();
             return reportes;
         }
@@ -77,7 +81,8 @@ namespace SRED_API.Repositories
                 Aula = x.EquipoIdEquipoNavigation.AulaIdAulaNavigation.Nombre,
                 Descripcion = x.Descripcion,
                 Equipo = $"{x.EquipoIdEquipoNavigation.TipoEquipoIdTipoEquipoNavigation.Nombre} {x.EquipoIdEquipoNavigation.NumeroIdentificacion}",
-                Folio = x.Folio
+                Folio = x.Folio,
+                FechaCreacion=x.FechaCreacion
             }).ToListAsync();
             return reportes;
         }
