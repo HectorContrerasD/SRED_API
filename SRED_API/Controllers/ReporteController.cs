@@ -30,23 +30,23 @@ namespace SRED_API.Controllers
             return reportes.Any() ? Ok(reportes) : NotFound();
         }
         [HttpGet("reportesxatender")]
-        public async Task<IActionResult> GetReportesXAtender([FromQuery] DateOnly? fecha = null)
+        public async Task<IActionResult> GetReportesXAtender(/*[FromQuery] DateOnly? fecha = null*/)
         {
             var reportes = await _repository.GetReportesXAtender();
-            if (fecha.HasValue)
-            {
-                reportes = reportes.Where(x => x.FechaCreacion == fecha).ToList();
-            }
+            //if (fecha.HasValue)
+            //{
+            //    reportes = reportes.Where(x => x.FechaCreacion == fecha).ToList();
+            //}
             return reportes.Any() ? Ok(reportes) : NotFound();
         }
         [HttpGet("reportesatendidos")]
-        public async Task<IActionResult> GetReportesAtendidos(DateOnly? fecha = null)
+        public async Task<IActionResult> GetReportesAtendidos(/*DateOnly? fecha = null*/)
         {
             var reportes = await _repository.GetReportesAtendidos();
-            if (fecha.HasValue)
-            {
-                reportes = reportes.Where(x => x.FechaCreacion == fecha).ToList();
-            }
+            //if (fecha.HasValue)
+            //{
+            //    reportes = reportes.Where(x => x.FechaCreacion == fecha).ToList();
+            //}
             return reportes.Any() ? Ok(reportes) : NotFound();
         }
         [HttpGet("reportesxmasantiguos")]
