@@ -7,6 +7,8 @@ using SRED_API.Models.Validators;
 using SRED_API.Repositories;
 using System.Net;
 using System.Net.Mail;
+using System.Net.Security;
+using System.Security.Cryptography.X509Certificates;
 
 namespace SRED_API.Controllers
 {
@@ -102,13 +104,14 @@ namespace SRED_API.Controllers
                 mailMess.To.Add(emailAdd);
                 mailMess.Subject = "Reporte atendido";
                 mailMess.Body = $"Estimado usuario, el reporte con el número de folio {reporte.Folio} ha sido atendido, que tenga un buen día";
-                using (var smtpClient = new SmtpClient("smtp.office.com", 587))
+                using (var smtpClient = new SmtpClient("Smtp.outlook.office365.com", 587))
                 {
-                    smtpClient.Credentials = new NetworkCredential("201G0239@rcarbonifera.tecnm.mx", "Ingreso2020");
+                    smtpClient.UseDefaultCredentials = false;
+                    smtpClient.Credentials = new System.Net.NetworkCredential("201G0239@rcarbonifera.tecnm.mx", "Ingreso2020");
                     smtpClient.EnableSsl = true;
                     await smtpClient.SendMailAsync(mailMess);
                 }
-            
+
             }
             catch (Exception ex)
             {
