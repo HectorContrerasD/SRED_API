@@ -17,7 +17,8 @@ namespace SRED_API.Repositories
                 Descripcion =x.Descripcion,
                 FechaCreacion = x.FechaCreacion,
                 Equipo = $"{x.EquipoIdEquipoNavigation.TipoEquipoIdTipoEquipoNavigation.Nombre} {x.EquipoIdEquipoNavigation.NumeroIdentificacion}",
-                Folio = x.Folio
+                Folio = x.Folio,
+                Estado =x.Estado
             }).ToListAsync();
             return reportes;
         }
@@ -30,7 +31,8 @@ namespace SRED_API.Repositories
                 Descripcion = x.Descripcion,
                 Equipo = $"{x.EquipoIdEquipoNavigation.TipoEquipoIdTipoEquipoNavigation.Nombre} {x.EquipoIdEquipoNavigation.NumeroIdentificacion}",
                 Folio = x.Folio,
-                FechaCreacion = x.FechaCreacion
+                FechaCreacion = x.FechaCreacion,
+                Estado = x.Estado
             }).ToListAsync();
             return reportes;
         }
@@ -43,7 +45,8 @@ namespace SRED_API.Repositories
                 Descripcion = x.Descripcion,
                 Equipo = $"{x.EquipoIdEquipoNavigation.TipoEquipoIdTipoEquipoNavigation.Nombre} {x.EquipoIdEquipoNavigation.NumeroIdentificacion}",
                 Folio = x.Folio,
-                FechaCreacion=x.FechaCreacion
+                FechaCreacion=x.FechaCreacion,
+                Estado = x.Estado
             }).ToListAsync();
             return reportes;
         }
@@ -56,7 +59,8 @@ namespace SRED_API.Repositories
                 Descripcion = x.Descripcion,
                 Equipo = $"{x.EquipoIdEquipoNavigation.TipoEquipoIdTipoEquipoNavigation.Nombre} {x.EquipoIdEquipoNavigation.NumeroIdentificacion}",
                 Folio = x.Folio,
-                FechaCreacion = x.FechaCreacion
+                FechaCreacion = x.FechaCreacion,
+                Estado = x.Estado
             }).ToListAsync();
             return reportes;
         }
@@ -69,7 +73,8 @@ namespace SRED_API.Repositories
                 Descripcion = x.Descripcion,
                 Equipo = $"{x.EquipoIdEquipoNavigation.TipoEquipoIdTipoEquipoNavigation.Nombre} {x.EquipoIdEquipoNavigation.NumeroIdentificacion}",
                 Folio = x.Folio,
-                FechaCreacion = x.FechaCreacion
+                FechaCreacion = x.FechaCreacion,
+                Estado = x.Estado
             }).ToListAsync();
             return reportes;
         }
@@ -82,7 +87,8 @@ namespace SRED_API.Repositories
                 Descripcion = x.Descripcion,
                 Equipo = $"{x.EquipoIdEquipoNavigation.TipoEquipoIdTipoEquipoNavigation.Nombre} {x.EquipoIdEquipoNavigation.NumeroIdentificacion}",
                 Folio = x.Folio,
-                FechaCreacion=x.FechaCreacion
+                FechaCreacion=x.FechaCreacion,
+                Estado = x.Estado
             }).ToListAsync();
             return reportes;
         }
