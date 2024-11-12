@@ -102,7 +102,7 @@ namespace SRED_API.Controllers
                 mailMess.To.Add(emailAdd);
                 mailMess.Subject = "Reporte atendido";
                 mailMess.Body = $"Estimado usuario, el reporte con el número de folio {reporte.Folio} ha sido atendido, que tenga un buen día";
-                using (var smtpClient = new SmtpClient("", 587))
+                using (var smtpClient = new SmtpClient("smtp.office.com", 587))
                 {
                     smtpClient.Credentials = new NetworkCredential("201G0239@rcarbonifera.tecnm.mx", "Ingreso2020");
                     smtpClient.EnableSsl = true;
