@@ -72,7 +72,7 @@ namespace SRED_API.Controllers
             {
                 var reporte = new Reporte
                 {
-                    NoControlAl = dto.NoControlTrabajo,
+                    NoControlAl = "201G0276",
                     EquipoIdEquipo = dto.EquipoId,
                     Descripcion = dto.Descripcion
                 };
