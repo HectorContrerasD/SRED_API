@@ -77,7 +77,7 @@ namespace SRED_API.Controllers
                 reporte.Estado = 0;
                 reporte.FechaCreacion = DateOnly.FromDateTime(DateTime.Now);
                 int count = await _repository.Count();
-                await _repository.Insert(reporte);
+                
                 reporte.Folio = $"DTICS{(count + 1):D5}";
                 await _repository.Insert(reporte);
                 return Ok("Reporte agregado correctamente");
@@ -98,7 +98,7 @@ namespace SRED_API.Controllers
             try
             {
                 var mailMess = new MailMessage();
-                mailMess.From = new MailAddress("201g0239@rcarbonifera.tecnm.mx");
+                mailMess.From = new MailAddress("201G0239@rcarbonifera.tecnm.mx");
                 mailMess.To.Add(emailAdd);
                 mailMess.Subject = "Reporte atendido";
                 mailMess.Body = $"Estimado usuario, el reporte con el número de folio {reporte.Folio} ha sido atendido, que tenga un buen día";
