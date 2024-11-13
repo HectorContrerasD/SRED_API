@@ -27,7 +27,7 @@ namespace SRED_API.Controllers
             var reportes = await _repository.GetReportes();
             if (fecha.HasValue)
             {
-                reportes = reportes.Where(x => x.FechaCreacion == fecha).ToList();
+                reportes = reportes.Where(x => x.FechaCreacion == fecha).OrderBy(x=>x.Folio).ToList();
             }
             return reportes.Any() ? Ok(reportes) : NotFound();
         }
@@ -37,7 +37,7 @@ namespace SRED_API.Controllers
             var reportes = await _repository.GetReportesXAtender();
             if (fecha.HasValue)
             {
-                reportes = reportes.Where(x => x.FechaCreacion == fecha).ToList();
+                reportes = reportes.Where(x => x.FechaCreacion == fecha).OrderBy(x=>x.Folio).ToList();
             }
             return reportes.Any() ? Ok(reportes) : NotFound();
         }
@@ -47,7 +47,7 @@ namespace SRED_API.Controllers
             var reportes = await _repository.GetReportesAtendidos();
             if (fecha.HasValue)
             {
-                reportes = reportes.Where(x => x.FechaCreacion == fecha).ToList();
+                reportes = reportes.Where(x => x.FechaCreacion == fecha).OrderBy(x => x.Folio).ToList();
             }
             return reportes.Any() ? Ok(reportes) : NotFound();
         }

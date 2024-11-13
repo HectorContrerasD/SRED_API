@@ -18,7 +18,8 @@ namespace SRED_API.Repositories
                 FechaCreacion = x.FechaCreacion,
                 Equipo = $"{x.EquipoIdEquipoNavigation.TipoEquipoIdTipoEquipoNavigation.Nombre} {x.EquipoIdEquipoNavigation.NumeroIdentificacion}",
                 Folio = x.Folio,
-                Estado =x.Estado
+                Estado =x.Estado,
+                NoControlTrabajo = x.NoControlAl,
             }).ToListAsync();
             return reportes;
         }
@@ -32,7 +33,8 @@ namespace SRED_API.Repositories
                 Equipo = $"{x.EquipoIdEquipoNavigation.TipoEquipoIdTipoEquipoNavigation.Nombre} {x.EquipoIdEquipoNavigation.NumeroIdentificacion}",
                 Folio = x.Folio,
                 FechaCreacion = x.FechaCreacion,
-                Estado = x.Estado
+                Estado = x.Estado,
+                NoControlTrabajo = x.NoControlAl
             }).ToListAsync();
             return reportes;
         }
@@ -46,7 +48,8 @@ namespace SRED_API.Repositories
                 Equipo = $"{x.EquipoIdEquipoNavigation.TipoEquipoIdTipoEquipoNavigation.Nombre} {x.EquipoIdEquipoNavigation.NumeroIdentificacion}",
                 Folio = x.Folio,
                 FechaCreacion=x.FechaCreacion,
-                Estado = x.Estado
+                Estado = x.Estado,
+                NoControlTrabajo    =x.NoControlAl
             }).ToListAsync();
             return reportes;
         }
@@ -60,13 +63,14 @@ namespace SRED_API.Repositories
                 Equipo = $"{x.EquipoIdEquipoNavigation.TipoEquipoIdTipoEquipoNavigation.Nombre} {x.EquipoIdEquipoNavigation.NumeroIdentificacion}",
                 Folio = x.Folio,
                 FechaCreacion = x.FechaCreacion,
-                Estado = x.Estado
+                Estado = x.Estado,
+                NoControlTrabajo=x.NoControlAl
             }).ToListAsync();
             return reportes;
         }
         public async Task<List<ReporteDatosDTO>> GetReportesRecientes()
         {
-            var reportes = await Context.Reporte.Include(x => x.EquipoIdEquipoNavigation).OrderBy(x=>x.FechaCreacion).Select(x => new ReporteDatosDTO
+            var reportes = await Context.Reporte.Include(x => x.EquipoIdEquipoNavigation).OrderBy(x=>x.FechaCreacion).ThenBy(x=>x.Folio).Select(x => new ReporteDatosDTO
             {
                 Id = x.IdReporte,
                 Aula = x.EquipoIdEquipoNavigation.AulaIdAulaNavigation.Nombre,
@@ -74,13 +78,14 @@ namespace SRED_API.Repositories
                 Equipo = $"{x.EquipoIdEquipoNavigation.TipoEquipoIdTipoEquipoNavigation.Nombre} {x.EquipoIdEquipoNavigation.NumeroIdentificacion}",
                 Folio = x.Folio,
                 FechaCreacion = x.FechaCreacion,
-                Estado = x.Estado
+                Estado = x.Estado,
+                NoControlTrabajo = x.NoControlAl
             }).ToListAsync();
             return reportes;
         }
         public async Task<List<ReporteDatosDTO>> GetReportesAntiguos()
         {
-            var reportes = await Context.Reporte.Include(x => x.EquipoIdEquipoNavigation).OrderByDescending(x => x.FechaCreacion).Select(x => new ReporteDatosDTO
+            var reportes = await Context.Reporte.Include(x => x.EquipoIdEquipoNavigation).OrderByDescending(x => x.FechaCreacion).ThenBy(x=>x.Folio).Select(x => new ReporteDatosDTO
             {
                 Id = x.IdReporte,
                 Aula = x.EquipoIdEquipoNavigation.AulaIdAulaNavigation.Nombre,
@@ -88,7 +93,8 @@ namespace SRED_API.Repositories
                 Equipo = $"{x.EquipoIdEquipoNavigation.TipoEquipoIdTipoEquipoNavigation.Nombre} {x.EquipoIdEquipoNavigation.NumeroIdentificacion}",
                 Folio = x.Folio,
                 FechaCreacion=x.FechaCreacion,
-                Estado = x.Estado
+                Estado = x.Estado,
+                NoControlTrabajo=x.NoControlAl
             }).ToListAsync();
             return reportes;
         }

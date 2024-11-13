@@ -6,7 +6,7 @@ namespace SRED_API.Models.DTOs
     public class ReporteDTO
     {
         public int Id { get; set; }
-        public string NoControlTrabajo { get; set; } = "201G0239";
+        public string NoControlTrabajo { get; set; }
         public string Descripcion { get; set; } = null!;
         public int EquipoId { get; set; }
 
