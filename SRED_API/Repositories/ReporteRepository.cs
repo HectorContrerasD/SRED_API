@@ -70,7 +70,7 @@ namespace SRED_API.Repositories
         }
         public async Task<List<ReporteDatosDTO>> GetReportesRecientes()
         {
-            var reportes = await Context.Reporte.Include(x => x.EquipoIdEquipoNavigation).OrderBy(x=>x.FechaCreacion).ThenBy(x=>x.Folio).Select(x => new ReporteDatosDTO
+            var reportes = await Context.Reporte.Include(x => x.EquipoIdEquipoNavigation).OrderBy(x => x.Folio).ThenBy(x=>x.FechaCreacion).Select(x => new ReporteDatosDTO
             {
                 Id = x.IdReporte,
                 Aula = x.EquipoIdEquipoNavigation.AulaIdAulaNavigation.Nombre,
@@ -85,7 +85,7 @@ namespace SRED_API.Repositories
         }
         public async Task<List<ReporteDatosDTO>> GetReportesAntiguos()
         {
-            var reportes = await Context.Reporte.Include(x => x.EquipoIdEquipoNavigation).OrderByDescending(x => x.FechaCreacion).ThenBy(x=>x.Folio).Select(x => new ReporteDatosDTO
+            var reportes = await Context.Reporte.Include(x => x.EquipoIdEquipoNavigation).OrderBy(x => x.Folio).ThenBy(x => x.FechaCreacion).Select(x => new ReporteDatosDTO
             {
                 Id = x.IdReporte,
                 Aula = x.EquipoIdEquipoNavigation.AulaIdAulaNavigation.Nombre,
