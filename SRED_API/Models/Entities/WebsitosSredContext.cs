@@ -26,6 +26,7 @@ public partial class WebsitosSredContext : DbContext
 
     public virtual DbSet<Usuario> Usuario { get; set; }
 
+    
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder
@@ -41,6 +42,9 @@ public partial class WebsitosSredContext : DbContext
             entity.Property(e => e.IdAula)
                 .HasColumnType("int(11)")
                 .HasColumnName("idAula");
+            entity.Property(e => e.Estado)
+                .HasDefaultValueSql("'1'")
+                .HasColumnType("tinyint(4)");
             entity.Property(e => e.Nombre).HasMaxLength(45);
         });
 
@@ -60,6 +64,9 @@ public partial class WebsitosSredContext : DbContext
             entity.Property(e => e.AulaIdAula)
                 .HasColumnType("int(11)")
                 .HasColumnName("Aula_idAula");
+            entity.Property(e => e.Estado)
+                .HasDefaultValueSql("'1'")
+                .HasColumnType("tinyint(4)");
             entity.Property(e => e.NumeroIdentificacion).HasMaxLength(15);
             entity.Property(e => e.TipoEquipoIdTipoEquipo)
                 .HasColumnType("int(11)")
@@ -110,6 +117,9 @@ public partial class WebsitosSredContext : DbContext
             entity.Property(e => e.IdTipoEquipo)
                 .HasColumnType("int(11)")
                 .HasColumnName("idTipoEquipo");
+            entity.Property(e => e.Estado)
+                .HasDefaultValueSql("'1'")
+                .HasColumnType("tinyint(4)");
             entity.Property(e => e.Nombre).HasMaxLength(45);
         });
 

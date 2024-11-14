@@ -54,7 +54,7 @@ namespace SRED_API.Controllers
 		[HttpGet]
 		public async Task<IActionResult> GetAll()
 		{
-			var tipos = await  _repository.GetAll().Select(x=> new TipoDTO
+			var tipos = await  _repository.GetAll().Where(x=>x.Estado == 1).Select(x=> new TipoDTO
 			{
 				Id = x.IdTipoEquipo,
 				Nombre = x.Nombre,
@@ -130,15 +130,17 @@ namespace SRED_API.Controllers
 				return NotFound();
 
 			}
-			var equiposxTipo =  _equipoRepository.GetAll().Where(x => x.TipoEquipoIdTipoEquipo == id).ToList();
+			var equiposxTipo =  _equipoRepository.GetAll().Where(x => x.TipoEquipoIdTipoEquipo == id && x.Estado ==1).ToList();
 			if (equiposxTipo!=null)
 			{
 				foreach (var item in equiposxTipo)
 				{
-					await _equipoRepository.Delete(item);
+					item.Estado = 0;
+					await _equipoRepository.Update(item);
 				}
 			}
-			await _repository.Delete(tipo);
+			tipo.Estado = 0;
+			await _repository.Update(tipo);
 			return Ok();
         }
 		

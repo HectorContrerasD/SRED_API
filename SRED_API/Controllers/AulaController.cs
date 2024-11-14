@@ -48,7 +48,7 @@ namespace SRED_API.Controllers
 		[HttpGet]
 		public async Task<IActionResult> GetAll()
 		{
-            var aulas = await _repository.GetAll().Select(x=> new AulaDTO
+            var aulas = await _repository.GetAll().Where(x => x.Estado == 1).Select(x=> new AulaDTO
 			{
 				Id = x.IdAula,
 				Nombre = x.Nombre
@@ -102,15 +102,17 @@ namespace SRED_API.Controllers
 			var aula = await _repository.Get(id);
 			if (aula != null)
 			{
-				var equiposxAula =  _equipoRepository.GetAll().Where(x => x.AulaIdAulaNavigation.IdAula == id).ToList();
+				var equiposxAula =  _equipoRepository.GetAll().Where(x => x.AulaIdAulaNavigation.IdAula == id && x.Estado==1).ToList();
 				if (equiposxAula != null)
 				{
 					foreach (var item in equiposxAula)
 					{
-						await _equipoRepository.Delete(item);
+						item.Estado = 0;
+						await _equipoRepository.Update(item);
 					}
 				}
-				await _repository.Delete(aula);
+				aula.Estado = 0;
+				await _repository.Update(aula);
 				return Ok("Aula eliminada correctamente");
             }
 			else

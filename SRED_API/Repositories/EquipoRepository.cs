@@ -9,7 +9,7 @@ namespace SRED_API.Repositories
 		private readonly WebsitosSredContext Context = context;
 		public async Task< List<EquipoDatosDto> >GetEquipos()
 		{
-			var equipo= await Context.Equipo.Include(x=>x.AulaIdAulaNavigation).Include(x=>x.TipoEquipoIdTipoEquipoNavigation).Select(x=>new EquipoDatosDto()
+			var equipo= await Context.Equipo.Include(x=>x.AulaIdAulaNavigation).Where(x => x.Estado == 1).Include(x=>x.TipoEquipoIdTipoEquipoNavigation).Select(x=>new EquipoDatosDto()
 			{
 				Aula=x.AulaIdAulaNavigation.Nombre,
 				Nombre=x.NumeroIdentificacion,
@@ -34,7 +34,7 @@ namespace SRED_API.Repositories
 				{
 					Id = x.IdAula,
 					Nombre = x.Nombre,
-					Equipos = x.Equipo.Select(e=> new EquipoDTO
+					Equipos = x.Equipo.Where(x => x.Estado == 1).Select(e=> new EquipoDTO
 					{
 						Id = e.IdEquipo,
 						Numero = e.NumeroIdentificacion,

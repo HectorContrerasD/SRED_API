@@ -96,7 +96,8 @@ namespace SRED_API.Controllers
 			var equipo = await _repository.Get(id);
 			if (equipo != null)
 			{
-				await _repository.Delete(equipo);
+				equipo.Estado = 0;
+				await _repository.Update(equipo);
 				return Ok();
 			}
 			else

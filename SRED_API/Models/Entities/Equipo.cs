@@ -13,6 +13,8 @@ public partial class Equipo
 
     public int AulaIdAula { get; set; }
 
+    public sbyte? Estado { get; set; }
+
     public virtual Aula AulaIdAulaNavigation { get; set; } = null!;
 
     public virtual ICollection<Reporte> Reporte { get; set; } = new List<Reporte>();
