@@ -19,6 +19,6 @@ namespace SRED_API.Models.DTOs
         public string Aula { get; set; } = null!;
         public DateOnly FechaCreacion { get; set; }
         public sbyte Estado { get; set; }
-
+        public string NumeroEquipo { get; set; }
     }
 }

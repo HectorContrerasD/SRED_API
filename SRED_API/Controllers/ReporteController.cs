@@ -63,6 +63,22 @@ namespace SRED_API.Controllers
             var reportes = await _repository.GetReportesRecientes();
             return reportes.Any() ? Ok(reportes) : NotFound();
         }
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetReporteById(int id)
+        {
+            var reporte = await _repository.GetReporteById(id);
+            if(reporte==null) return NotFound();
+            return Ok(reporte);
+            
+        }
+        [HttpGet("pornumerocontrol/{numctrl}")]
+        public async Task<IActionResult> GetReporteByNumControl(string numctrl)
+        {
+            var reportes = await _repository.GetReporteByUsuario(numctrl);
+            return reportes.Any() ? Ok(reportes) : NotFound();
+           
+        }
+
         [HttpPost]
         public async Task<IActionResult> Agregar(ReporteDTO dto)
         {
