@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="FluentValidation" Version="11.10.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.5" />
     <PackageReference Include="microsoft.entityframeworkcore.tools" Version="8.0.10">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

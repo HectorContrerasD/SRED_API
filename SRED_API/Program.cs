@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using SRED_API.Helpers;
 using SRED_API.Models.Entities;
 using SRED_API.Repositories;
 
@@ -30,6 +31,8 @@ builder.Services.AddTransient<AulaRepository>();
 builder.Services.AddTransient<EquipoRepository>();
 builder.Services.AddTransient<TipoRepository>();
 builder.Services.AddTransient<ReporteRepository>();
+builder.Services.AddTransient<UsuarioReporisitory>();
+builder.Services.AddSingleton<JWTHelper>();
 var app = builder.Build();
 
 app.UseCors("PermitirTodos");
@@ -42,6 +45,8 @@ if (app.Environment.IsDevelopment())
 app.MapControllers();	
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 

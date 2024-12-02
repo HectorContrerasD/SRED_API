@@ -7,7 +7,9 @@ public partial class Usuario
 {
     public int IdUsuario { get; set; }
 
-    public string NumeroControl { get; set; } = null!;
+    public string Nombre { get; set; } = null!;
 
     public sbyte Rol { get; set; }
+
+    public string Contraseña { get; set; } = null!;
 }
