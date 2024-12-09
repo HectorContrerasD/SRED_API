@@ -4,6 +4,7 @@ using SRED_API.Helpers;
 using SRED_API.Models.DTOs;
 using SRED_API.Repositories;
 using System.IdentityModel.Tokens.Jwt;
+using System.Reflection.Metadata.Ecma335;
 
 namespace SRED_API.Controllers
 {
@@ -13,10 +14,12 @@ namespace SRED_API.Controllers
     {
         private readonly UsuarioReporisitory _repository;
         private readonly JWTHelper _jwthelper;
-        public LoginController(UsuarioReporisitory reporisitory, JWTHelper jWTHelper)
+        private readonly IHttpClientFactory httpClient;
+        public LoginController(UsuarioReporisitory reporisitory, JWTHelper jWTHelper, IHttpClientFactory httpClient)
         {
             _repository = reporisitory;
             _jwthelper = jWTHelper;
+            this.httpClient = httpClient;
         }
         [HttpPost]
         public async Task<IActionResult> AdminLogin(UsuarioDTO usuarioDTO)
@@ -35,8 +38,36 @@ namespace SRED_API.Controllers
             {
                 rol = "Encargado";
             }
-            var token = _jwthelper.GetToken(usuario.Nombre, rol, usuario.IdUsuario);
+            var token = _jwthelper.GetToken(usuario.Nombre, rol);
             
+            return Ok(token);
+        }
+        [HttpPost("UserLog")]
+        public async Task<IActionResult> UserLogin(UsuarioDTO usuarioDTO)
+        {
+            if (usuarioDTO == null){return BadRequest();}
+            if (string.IsNullOrWhiteSpace(usuarioDTO.Usuario)) return BadRequest("Ingrese el usuario. ");
+            if (string.IsNullOrWhiteSpace(usuarioDTO.Contrasena)) return BadRequest("Ingrese la contraseña. ");
+            bool esNumTrabajo = usuarioDTO.Usuario.All(char.IsDigit);
+            string url;
+            HttpResponseMessage resp;
+            if (esNumTrabajo)
+            {
+                url = $"docente/datosgenerales?control={usuarioDTO.Usuario}&password={usuarioDTO.Contrasena}";
+            }
+            else
+            {
+                var path = $"alumno/datosgenerales?control={usuarioDTO.Usuario}&password ={usuarioDTO.Contrasena}";
+                using HttpClient Client = httpClient.CreateClient("client");
+                resp = await Client.GetAsync(path);
+                if (!resp.IsSuccessStatusCode)
+                {
+                    return BadRequest(resp.Content.ReadAsStringAsync().Result);
+
+                }
+            }
+            string rol = "Invitado";
+            var token = _jwthelper.GetToken(usuarioDTO.Usuario, rol);
             return Ok(token);
         }
     }
