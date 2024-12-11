@@ -33,7 +33,7 @@ namespace SRED_API.Helpers
                 audience,
                 basicas,
                 DateTime.Now,
-                DateTime.Now.AddMinutes(1440),
+                DateTime.Now.AddMinutes(20),
                  new SigningCredentials
                 (new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret ?? "")),
                 SecurityAlgorithms.HmacSha256)
