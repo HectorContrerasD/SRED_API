@@ -4,6 +4,7 @@ using SRED_API.Helpers;
 using SRED_API.Models.DTOs;
 using SRED_API.Repositories;
 using System.IdentityModel.Tokens.Jwt;
+using System.IO;
 using System.Reflection.Metadata.Ecma335;
 
 namespace SRED_API.Controllers
@@ -53,7 +54,14 @@ namespace SRED_API.Controllers
             HttpResponseMessage resp;
             if (esNumTrabajo)
             {
-                url = $"docente/datosgenerales?control={usuarioDTO.Usuario}&password={usuarioDTO.Contrasena}";
+                url = $"docentes/datosgenerales?control={usuarioDTO.Usuario}&password={usuarioDTO.Contrasena}";
+                using HttpClient Client = httpClient.CreateClient("client");
+                resp = await Client.GetAsync(url);
+                if (!resp.IsSuccessStatusCode)
+                {
+                    return BadRequest(resp.Content.ReadAsStringAsync().Result);
+
+                }
             }
             else
             {
