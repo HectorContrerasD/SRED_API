@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SRED_API.Helpers;
 using SRED_API.Models.DTOs;
 using SRED_API.Models.Entities;
 
@@ -34,13 +35,15 @@ namespace SRED_API.Repositories
 				{
 					Id = x.IdAula,
 					Nombre = x.Nombre,
-					Equipos = x.Equipo.Where(x => x.Estado == 1).Select(e=> new EquipoDTO
+					Equipos = x.Equipo.Where(x => x.Estado == 1).Select(e=> new EquipoDatosDto
 					{
 						Id = e.IdEquipo,
 						Numero = e.NumeroIdentificacion,
 						TipoId = e.TipoEquipoIdTipoEquipo,
-						AulaId = e.AulaIdAula
-					}).ToList()
+						AulaId = e.AulaIdAula,
+						Tipo = e.TipoEquipoIdTipoEquipoNavigation.Nombre,
+						IconoTipo = ImageToBase64Helper.ConvertBase64($"wwwroot/images/{e.TipoEquipoIdTipoEquipo}.jpg")
+                    }).ToList()
 				}).FirstOrDefaultAsync();
 			return aula;
 		}

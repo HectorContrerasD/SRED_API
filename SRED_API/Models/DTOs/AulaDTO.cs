@@ -7,7 +7,7 @@
     }
 	public class AulaConEquiposDTO: AulaDTO
 	{
-		public List<EquipoDTO> Equipos { get; set; }= new();
+		public List<EquipoDatosDto> Equipos { get; set; }= new();
 	}
 	
 }
