@@ -57,7 +57,7 @@ namespace SRED_API.Controllers
             }
             else
             {
-                var path = $"alumno/datosgenerales?control={usuarioDTO.Usuario}&password ={usuarioDTO.Contrasena}";
+                var path = $"alumno/datosgenerales?control={usuarioDTO.Usuario}&password={usuarioDTO.Contrasena}";
                 using HttpClient Client = httpClient.CreateClient("client");
                 resp = await Client.GetAsync(path);
                 if (!resp.IsSuccessStatusCode)

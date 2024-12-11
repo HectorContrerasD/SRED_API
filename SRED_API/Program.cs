@@ -35,7 +35,7 @@ builder.Services.AddTransient<UsuarioReporisitory>();
 builder.Services.AddSingleton<JWTHelper>();
 builder.Services.AddHttpClient("client", builder=>
 {
-    builder.BaseAddress = new Uri("https://sie.itesrc.net/api/");
+    builder.BaseAddress = new Uri("https://sie.itesrc.edu.mx/api/");
     builder.DefaultRequestHeaders.Accept.Clear();
     builder.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
 });
