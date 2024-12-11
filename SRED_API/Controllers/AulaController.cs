@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using SRED_API.Helpers;
 using SRED_API.Models.DTOs;
 using SRED_API.Models.Entities;
@@ -61,6 +62,12 @@ namespace SRED_API.Controllers
 			var aula = await _repository.GetAula(id);
 			
 			return aula != null ? Ok(aula) : NotFound("No se encontró el aula");
+		}
+		[HttpGet("/aulas/conequipos")]
+		public async Task<IActionResult> GetAulasConEquipos()
+		{
+			var aulas = await _repository.GetAulasConEquipos();
+			return aulas != null ? Ok(aulas) : NotFound("No se encontraron aulas que tengan equipos");
 		}
 		[HttpPut]
 		public async Task<IActionResult> Editar(AulaDTO aulaDTO)

@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using SRED_API.Models.DTOs;
 using SRED_API.Models.Entities;
+using System.Reflection.Metadata.Ecma335;
 
 namespace SRED_API.Repositories
 {
@@ -21,5 +22,13 @@ namespace SRED_API.Repositories
                 Nombre = x.Nombre,
             }).FirstOrDefaultAsync(x => x.Id == id);
         }
+		public async Task< List< AulaDTO>> GetAulasConEquipos()
+		{
+			return await Context.Aula.Where(x=>x.Equipo.Any()&& x.Estado == 1).Select(x=> new AulaDTO
+			{
+				Id = x.IdAula,
+				Nombre= x.Nombre
+			}).ToListAsync();
+		}
 	}
 }
