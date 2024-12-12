@@ -14,7 +14,7 @@ namespace SRED_API.Helpers
         {
             this.configuration = configuration;  
         }
-        public string GetToken(string username, string role)
+        public string GetToken(string username, string role, string pass)
         {
            JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
             var issuer = configuration.GetSection("Jwt").GetValue<string>("Issuer");
@@ -24,6 +24,7 @@ namespace SRED_API.Helpers
             {
                 new Claim(ClaimTypes.Name, username),
                 new Claim(ClaimTypes.Role,role),
+                new Claim("password", pass),
                 new Claim(JwtRegisteredClaimNames.Iss, issuer),
                 new Claim (JwtRegisteredClaimNames.Aud, audience)
             };
