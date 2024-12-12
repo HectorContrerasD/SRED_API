@@ -75,7 +75,7 @@ namespace SRED_API.Controllers
                 }
             }
             string rol = "Invitado";
-            var token = _jwthelper.GetToken(usuarioDTO.Usuario, rol, EncryptionHelper.StringToSHA512(usuarioDTO.Contrasena));
+            var token = _jwthelper.GetToken(usuarioDTO.Usuario, rol, usuarioDTO.Contrasena);
             return Ok(token);
         }
     }
