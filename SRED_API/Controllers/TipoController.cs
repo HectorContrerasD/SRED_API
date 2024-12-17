@@ -1,4 +1,5 @@
 ﻿using FluentValidation.Results;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using SRED_API.Repositories;
 
 namespace SRED_API.Controllers
 {
+	[Authorize]
 	[Route("api/[controller]")]
 	[ApiController]
 	public class TipoController : ControllerBase
@@ -21,7 +23,8 @@ namespace SRED_API.Controllers
 				_repository = Repository;
 			_equipoRepository = equipoRepository;
         }
-		[HttpPost]
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
 		public async Task<IActionResult> Agregar(TipoDTO tipoDTO)
 		{
 			if (tipoDTO == null) { return BadRequest("No estas enviando un dto"); }
@@ -51,7 +54,8 @@ namespace SRED_API.Controllers
 				return BadRequest(results.Errors.Select(x => x.ErrorMessage));
 			}
 		}
-		[HttpGet]
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
 		public async Task<IActionResult> GetAll()
 		{
 			var tipos = await  _repository.GetAll().Where(x=>x.Estado == 1).Select(x=> new TipoDTO
@@ -63,7 +67,8 @@ namespace SRED_API.Controllers
 			return Ok(tipos);
 		
 		}
-		[HttpGet("{id}")]
+        [Authorize(Roles = "Admin")]
+        [HttpGet("{id}")]
 		public async Task<IActionResult> Get(int id)
 		{
 			var tipo = await _repository.GetTipo(id);
@@ -79,7 +84,8 @@ namespace SRED_API.Controllers
 			};
 			return Ok(tipoDTO);
 		}
-		[HttpPut]
+        [Authorize(Roles = "Admin")]
+        [HttpPut]
 		public async Task<IActionResult> Editar(TipoDTO tipoDTO)
 		{
 			if (tipoDTO == null)
@@ -121,7 +127,8 @@ namespace SRED_API.Controllers
 				return BadRequest();
 			}
 		}
-		[HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
+        [HttpPut("{id}")]
 		public async Task<IActionResult> Delete(int id)
 		{
 			var tipo = await _repository.Get(id);

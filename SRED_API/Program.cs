@@ -1,8 +1,11 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using SRED_API.Helpers;
 using SRED_API.Models.Entities;
 using SRED_API.Repositories;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,7 +20,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("PermitirTodos", policy =>
     {
-        policy.AllowAnyOrigin() // Cambia esto al origen que necesites permitir
+        policy.AllowAnyOrigin() 
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
@@ -39,6 +42,23 @@ builder.Services.AddHttpClient("client", builder=>
     builder.DefaultRequestHeaders.Accept.Clear();
     builder.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
 });
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer
+    (
+        x =>
+        {
+            var issuer = builder.Configuration.GetSection("Jwt").GetValue<string>("Issuer");
+            var audience = builder.Configuration.GetSection("Jwt").GetValue<string>("Audience");
+            var secret = builder.Configuration.GetSection("Jwt").GetValue<string>("Secret");
+            x.TokenValidationParameters = new()
+            {
+                ValidIssuer = issuer,
+                ValidAudience = audience,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret ?? "")),
+                ValidateLifetime = true
+            };
+
+        }
+    );
 var app = builder.Build();
 
 app.UseCors("PermitirTodos");
@@ -53,9 +73,7 @@ app.MapControllers();
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
-
 app.UseAuthorization();
-
 app.MapControllers();
 
 app.Run();

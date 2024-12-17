@@ -1,4 +1,5 @@
 ﻿using FluentValidation.Results;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +12,7 @@ using SRED_API.Repositories;
 
 namespace SRED_API.Controllers
 {
+	
 	[Route("api/[controller]")]
 	[ApiController]
 	public class AulaController : ControllerBase
@@ -22,6 +24,7 @@ namespace SRED_API.Controllers
 			_repository = Repository;
 			_equipoRepository = equipoRepository;
 		}
+		[Authorize(Roles ="Admin")]
 		[HttpPost]
 		public async Task<IActionResult> Agregar(AulaDTO aulaDTO)
 		{
@@ -46,6 +49,7 @@ namespace SRED_API.Controllers
 			}
 
 		}
+		[Authorize(Roles = "Admin")]
 		[HttpGet]
 		public async Task<IActionResult> GetAll()
 		{
@@ -56,20 +60,23 @@ namespace SRED_API.Controllers
 			}).ToListAsync();
 			return aulas != null ? Ok(aulas) : NotFound("No se encontraron aulas");
 		}
-		[HttpGet("{id}")]
+        [Authorize(Roles = "Admin")]
+        [HttpGet("{id}")]
 		public async Task<IActionResult> Get(int id)
 		{
 			var aula = await _repository.GetAula(id);
 			
 			return aula != null ? Ok(aula) : NotFound("No se encontró el aula");
 		}
-		[HttpGet("/aulas/conequipos")]
+        [Authorize(Roles = "Invitado")]
+        [HttpGet("/aulas/conequipos")]
 		public async Task<IActionResult> GetAulasConEquipos()
 		{
 			var aulas = await _repository.GetAulasConEquipos();
 			return aulas != null ? Ok(aulas) : NotFound("No se encontraron aulas que tengan equipos");
 		}
-		[HttpPut]
+        [Authorize(Roles = "Admin")]
+        [HttpPut]
 		public async Task<IActionResult> Editar(AulaDTO aulaDTO)
 		{
 			if (aulaDTO == null)
@@ -103,7 +110,8 @@ namespace SRED_API.Controllers
 			}
 
 		}
-		[HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
+        [HttpPut("{id}")]
 		public async Task<IActionResult> Delete(int id)
 		{
 			var aula = await _repository.Get(id);

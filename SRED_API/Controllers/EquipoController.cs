@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SRED_API.Models.DTOs;
 using SRED_API.Models.Entities;
@@ -7,6 +8,7 @@ using SRED_API.Repositories;
 
 namespace SRED_API.Controllers
 {
+	[Authorize]
 	[Route("api/[controller]")]
 	[ApiController]
 	public class EquipoController : ControllerBase
@@ -18,7 +20,8 @@ namespace SRED_API.Controllers
             _repository = Repository;
 		
         }
-		[HttpPost]
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
 		public async Task<IActionResult> Agregar(EquipoDTO equipoDTO)
 		{
 			if (equipoDTO == null) { return BadRequest("No estas mandando un dto"); }
@@ -39,24 +42,28 @@ namespace SRED_API.Controllers
 				return BadRequest(results.Errors.Select(x => x.ErrorMessage));
 			}
 		}
+        [Authorize(Roles = "Admin,Invitado")]
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
             var equipos = await _repository.GetEquipos();
             return equipos != null ? Ok(equipos) : NotFound("No se encontraron equipos");
         }
+        [Authorize(Roles = "Admin")]
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
             var equipo = await _repository.GetEquipo(id);
             return equipo != null ? Ok(equipo) : NotFound("No se encontró el equipo");
         }
-		[HttpGet("/api/equipo/poraula")]
+        [Authorize(Roles = "Invitado")]
+        [HttpGet("/api/equipo/poraula")]
 		public async Task<IActionResult> GetEquiposPorAula(int idaula)
 		{
 			var aulaConEquipos = await _repository.GetEquiposByAulaId(idaula);
 			return aulaConEquipos != null ? Ok(aulaConEquipos) : NotFound("No se encontraron equipos para el aula");
 		}
+        [Authorize(Roles = "Admin")]
         [HttpPut]
 		public async Task<IActionResult> Editar(EquipoDTO equipoDTO)
 		{
@@ -90,7 +97,8 @@ namespace SRED_API.Controllers
 				return BadRequest();
 			}
 		}
-		[HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
+        [HttpPut("{id}")]
 		public async Task<IActionResult> Delete(int id)
 		{
 			var equipo = await _repository.Get(id);

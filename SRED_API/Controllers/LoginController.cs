@@ -28,7 +28,7 @@ namespace SRED_API.Controllers
             if (usuarioDTO == null) return BadRequest();
             if (string.IsNullOrWhiteSpace(usuarioDTO.Usuario)) return BadRequest("Ingrese el usuario. ");
             if (string.IsNullOrWhiteSpace(usuarioDTO.Contrasena)) return BadRequest("Ingrese la contraseña. ");
-            var usuario = await _repository.GetUsuario(usuarioDTO.Usuario, EncryptionHelper.StringToSHA512( usuarioDTO.Contrasena));
+            var usuario = await _repository.GetUsuario(usuarioDTO.Usuario, EncryptionHelper.StringToSHA512(usuarioDTO.Contrasena));
             if (usuario == null) return Unauthorized("Usuario o contraseña incorrectos");
             string rol = ""; 
             if (usuario.Rol == 0)

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SRED_API.Models.DTOs;
@@ -12,6 +13,7 @@ using System.Security.Cryptography.X509Certificates;
 
 namespace SRED_API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ReporteController : ControllerBase
@@ -21,6 +23,7 @@ namespace SRED_API.Controllers
         {
             _repository = reporteRepository;
         }
+        [Authorize(Roles = "Encargado")]
         [HttpGet("reportes")] //fromquery = /reportes?fecha=2024-11-10
         public async Task<IActionResult> GetReportes([FromQuery] DateOnly? fecha = null)
         {
@@ -31,6 +34,7 @@ namespace SRED_API.Controllers
             }
             return reportes.Any() ? Ok(reportes) : NotFound();
         }
+        [Authorize(Roles = "Encargado")]
         [HttpGet("reportesxatender")]
         public async Task<IActionResult> GetReportesXAtender([FromQuery] DateOnly? fecha = null)
         {
@@ -41,6 +45,7 @@ namespace SRED_API.Controllers
             }
             return reportes.Any() ? Ok(reportes) : NotFound();
         }
+        [Authorize(Roles = "Encargado")]
         [HttpGet("reportesatendidos")]
         public async Task<IActionResult> GetReportesAtendidos(DateOnly? fecha = null)
         {
@@ -51,18 +56,21 @@ namespace SRED_API.Controllers
             }
             return reportes.Any() ? Ok(reportes) : NotFound();
         }
+        [Authorize(Roles = "Encargado")]
         [HttpGet("reportesxmasantiguos")]
         public async Task<IActionResult> GetReportesXAntiguedad()
         {
             var reportes = await _repository.GetReportesAntiguos();
             return reportes.Any() ? Ok(reportes) : NotFound();
         }
+        [Authorize(Roles = "Encargado")]
         [HttpGet("reportesxmasrecientes")]
         public async Task<IActionResult> GetReportesxMasRecientes1()
         {
             var reportes = await _repository.GetReportesRecientes();
             return reportes.Any() ? Ok(reportes) : NotFound();
         }
+        [Authorize(Roles = "Encargado,Invitado")]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetReporteById(int id)
         {
@@ -71,6 +79,7 @@ namespace SRED_API.Controllers
             return Ok(reporte);
             
         }
+        [Authorize(Roles = "Invitado")]
         [HttpGet("pornumerocontrol/{numctrl}")]
         public async Task<IActionResult> GetReporteByNumControl(string numctrl)
         {
@@ -78,7 +87,7 @@ namespace SRED_API.Controllers
             return reportes.Any() ? Ok(reportes) : NotFound();
            
         }
-
+        [Authorize(Roles = "Invitado")]
         [HttpPost]
         public async Task<IActionResult> Agregar(ReporteDTO dto)
         {
@@ -88,7 +97,7 @@ namespace SRED_API.Controllers
             {
                 var reporte = new Reporte
                 {
-                    NoControlAl = "201G0276",
+                    NoControlAl = dto.NoControlTrabajo,
                     EquipoIdEquipo = dto.EquipoId,
                     Descripcion = dto.Descripcion
                 };
@@ -105,6 +114,7 @@ namespace SRED_API.Controllers
                 return BadRequest(results.Errors.Select(x => x.ErrorMessage));
             }
         }
+        [Authorize(Roles = "Encargado")]
         [HttpPut("{id}")]
         public async Task<IActionResult> ModificarEstado(int id)
         {
