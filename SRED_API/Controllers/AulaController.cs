@@ -69,7 +69,7 @@ namespace SRED_API.Controllers
 			return aula != null ? Ok(aula) : NotFound("No se encontró el aula");
 		}
         [Authorize(Roles = "Invitado")]
-        [HttpGet("/aulas/conequipos")]
+        [HttpGet("/api/aula/conequipos")]
 		public async Task<IActionResult> GetAulasConEquipos()
 		{
 			var aulas = await _repository.GetAulasConEquipos();

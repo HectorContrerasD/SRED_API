@@ -71,7 +71,7 @@ namespace SRED_API.Repositories
         }
         public async Task<List<ReporteDatosDTO>> GetReportesXAtender()
         {
-            var reportes = await Context.Reporte.Include(x => x.EquipoIdEquipoNavigation).OrderBy(x => x.Folio).Where(x=>x.Estado == 0).Select(x => new ReporteDatosDTO
+            var reportes = await Context.Reporte.Include(x => x.EquipoIdEquipoNavigation).OrderByDescending(x => x.Folio).Where(x=>x.Estado == 0).Select(x => new ReporteDatosDTO
             {
                 Id = x.IdReporte,
                 Aula = x.EquipoIdEquipoNavigation.AulaIdAulaNavigation.Nombre,
